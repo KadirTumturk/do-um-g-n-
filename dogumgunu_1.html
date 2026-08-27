@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>İyi ki Doğdun</title>
+<style>
+  :root{
+    --ink:#1c1330;
+    --plum:#241a3b;
+    --plum-deep:#16102a;
+    --gold:#e8b657;
+    --blush:#f3a7b0;
+    --cream:#faf3e8;
+    --line:rgba(232,182,87,0.25);
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  @font-face{
+    font-family:'DisplaySerif';
+    src:local('Georgia');
+  }
+
+  body{
+    background:radial-gradient(ellipse at 50% -10%, #352752 0%, var(--plum) 45%, var(--plum-deep) 100%);
+    color:var(--cream);
+    font-family:'Iowan Old Style','Georgia',serif;
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+
+  .stars{
+    position:fixed; inset:0; pointer-events:none; z-index:0;
+  }
+  .star{
+    position:absolute; width:2px; height:2px; background:var(--gold);
+    border-radius:50%; opacity:.5;
+    animation:twinkle 3.5s ease-in-out infinite;
+  }
+  @keyframes twinkle{ 0%,100%{opacity:.15} 50%{opacity:.85} }
+
+  section{
+    position:relative; z-index:1;
+    max-width:720px; margin:0 auto;
+    padding:110px 28px;
+  }
+
+  .eyebrow{
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    text-transform:uppercase; letter-spacing:.28em;
+    font-size:11px; color:var(--gold); opacity:.8;
+    text-align:center; margin-bottom:18px;
+  }
+
+  h1{
+    font-size:clamp(38px,7vw,64px);
+    text-align:center;
+    font-weight:400;
+    line-height:1.1;
+    color:var(--cream);
+  }
+  h1 em{
+    font-style:italic; color:var(--blush);
+  }
+
+  h2{
+    font-size:clamp(26px,4vw,36px);
+    font-weight:400;
+    text-align:center;
+    margin-bottom:12px;
+  }
+
+  .sub{
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    text-align:center;
+    color:var(--cream);
+    opacity:.65;
+    font-size:15px;
+    max-width:440px;
+    margin:14px auto 0;
+    line-height:1.6;
+  }
+
+  /* --- HERO / CANDLES --- */
+  #hero{ min-height:100vh; display:flex; flex-direction:column; justify-content:center; padding-top:60px; }
+
+  .cake{
+    display:flex; justify-content:center; gap:22px; margin:64px 0 30px;
+  }
+  .candle{
+    display:flex; flex-direction:column; align-items:center;
+    cursor:pointer; user-select:none;
+    background:none; border:none;
+  }
+  .flame{
+    width:10px; height:16px; border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;
+    background:linear-gradient(180deg,#fff2c9,var(--gold));
+    box-shadow:0 0 14px 4px rgba(232,182,87,.55);
+    animation:flicker 1.6s ease-in-out infinite;
+    transition:opacity .3s, transform .3s;
+  }
+  .candle.out .flame{ opacity:0; transform:scale(.3) translateY(6px); box-shadow:none; }
+  .candle.out .wax::after{ content:'~'; color:#bbb; }
+  @keyframes flicker{ 0%,100%{transform:scaleY(1)} 50%{transform:scaleY(.85) translateX(1px)} }
+  .wax{
+    width:9px; height:38px; margin-top:2px;
+    background:linear-gradient(180deg,var(--blush),#d98894);
+    border-radius:2px;
+  }
+  .hint{
+    text-align:center; font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:12px; letter-spacing:.05em; color:var(--gold); opacity:.7;
+    margin-top:6px;
+  }
+
+  #wish{
+    text-align:center; margin-top:36px;
+    font-size:20px; font-style:italic; color:var(--blush);
+    opacity:0; transform:translateY(10px);
+    transition:opacity .8s, transform .8s;
+  }
+  #wish.show{ opacity:1; transform:none; }
+
+  /* --- REASONS --- */
+  .grid{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:16px; margin-top:48px;
+  }
+  .card{
+    perspective:1000px; height:150px; cursor:pointer;
+  }
+  .card-inner{
+    position:relative; width:100%; height:100%;
+    transform-style:preserve-3d;
+    transition:transform .6s cubic-bezier(.4,.2,.2,1);
+    border-radius:10px;
+  }
+  .card.flipped .card-inner{ transform:rotateY(180deg); }
+  .face{
+    position:absolute; inset:0; backface-visibility:hidden;
+    border-radius:10px; padding:18px;
+    display:flex; align-items:center; justify-content:center;
+    text-align:center;
+    font-family:'Helvetica Neue',Arial,sans-serif;
+  }
+  .front{
+    background:linear-gradient(160deg,#2e2249,#241a3b);
+    border:1px solid var(--line);
+    font-size:13px; letter-spacing:.1em; color:var(--gold); text-transform:uppercase;
+  }
+  .back{
+    background:linear-gradient(160deg,var(--blush),#d98894);
+    color:var(--plum-deep);
+    transform:rotateY(180deg);
+    font-size:14.5px; line-height:1.45; font-weight:600;
+    font-family:'Iowan Old Style','Georgia',serif;
+  }
+
+  /* --- MEMORIES --- */
+  .memories{
+    display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:44px;
+  }
+  .memory{
+    aspect-ratio:4/5; border-radius:10px; overflow:hidden;
+    border:1px solid var(--line);
+    background:linear-gradient(160deg,#2e2249,#1c1330);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:12px; color:var(--gold); opacity:.55; text-align:center; padding:10px;
+  }
+  .memory img{ width:100%; height:100%; object-fit:cover; }
+
+  /* --- LETTER --- */
+  .letter{
+    background:linear-gradient(160deg,#2e2249,#1c1330);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:44px 34px;
+    margin-top:20px;
+    font-size:17px; line-height:1.85;
+  }
+  .letter .signature{
+    display:block; margin-top:24px; font-style:italic; color:var(--blush); font-size:19px;
+  }
+
+  footer{
+    text-align:center; padding:50px 20px 80px;
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:12px; color:var(--gold); opacity:.5; letter-spacing:.05em;
+  }
+
+  .confetti{
+    position:fixed; top:-10px; z-index:5; pointer-events:none;
+    border-radius:2px;
+  }
+
+  /* --- MOBILE FIXES --- */
+  @media (max-width:480px){
+    section{
+      padding:70px 20px;
+    }
+    #hero{
+      padding-top:40px;
+    }
+    .cake{
+      flex-wrap:wrap;
+      gap:14px 10px;
+      margin:44px 0 24px;
+    }
+    h1{
+      font-size:clamp(30px,9vw,44px);
+    }
+    h2{
+      font-size:clamp(22px,6vw,28px);
+    }
+    .grid{
+      grid-template-columns:1fr;
+      gap:12px;
+    }
+    .memories{
+      gap:10px;
+    }
+    .letter{
+      padding:30px 22px;
+      font-size:15.5px;
+      line-height:1.75;
+    }
+    .letter .signature{
+      font-size:17px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<section id="hero">
+  <p class="eyebrow">Sana özel</p>
+  <h1>İyi ki doğdun <em>prensesim</em></h1>
+  <p class="sub">Mumların hepsini tek tek üfle. Dilek tutmayı da unutma</p>
+
+  <div class="cake" id="cake"></div>
+  <p class="hint" id="cakeHint">mumlara dokun</p>
+  <p id="wish">Bütün ömrün mutlulukla dolu gönlünce olsun. 🤍</p>
+</section>
+
+<section id="reasons">
+  <p class="eyebrow">01 — Bir liste</p>
+  <h2>Seni sevmemin sebeplerinden birkaçı</h2>
+  <p class="sub">Kartlara dokun.</p>
+  <div class="grid" id="grid"></div>
+</section>
+
+<section id="memories-section">
+  <p class="eyebrow">02 — Anılar</p>
+  <h2>En sevdiğim fotoğraflarımızdan birkaçı</h2>
+  <div class="memories" id="memories"></div>
+</section>
+
+<section id="letter-section">
+  <p class="eyebrow">03 — Son söz</p>
+  <h2>Sana bir şey yazdım</h2>
+  <div class="letter">
+    Bugdoğum günün yani ama doğum günün sadece bugün olsa bile her gün doğduğuna seni tanıdığıma sevdiğime şükrediyorum.
+    <br><br>
+    Gülüşünün sesinin varlığının en kötü günümü bile nasıl değiştirdiğini, en sıradan anları
+    bile dünyanın en güzen gününe çevirdiğini anlatmaya kelimeler yetmiyor. Aşırı seviyorum seni.
+    <br><br>
+    Önümüzdeki doğum gününe kadar seninle yemek içmek gezmek eğlenmek her şey için sabırsızlanıyorum.
+    İyi ki varsın.İyi ki tanımışım seni.İyi ki girmişsin hayatıma. İyi ki doğdun dünyanın en güzel kızı.
+    <span class="signature">— seni her şeyden çok seven sevgilin</span>
+  </div>
+</section>
+
+<footer>yıldızlar ne kadar fazla olursa olsun sana olan sevgimin yanında her şey çok çok az</footer>
+
+<script>
+// yıldızlar
+const starsEl = document.getElementById('stars');
+for(let i=0;i<70;i++){
+  const s = document.createElement('div');
+  s.className='star';
+  s.style.left = Math.random()*100+'%';
+  s.style.top = Math.random()*100+'%';
+  s.style.animationDelay = (Math.random()*3)+'s';
+  starsEl.appendChild(s);
+}
+
+// mumlar
+const cake = document.getElementById('cake');
+const CANDLE_COUNT = 7;
+let lit = CANDLE_COUNT;
+for(let i=0;i<CANDLE_COUNT;i++){
+  const btn = document.createElement('button');
+  btn.className='candle';
+  btn.innerHTML = '<div class="flame"></div><div class="wax"></div>';
+  btn.addEventListener('click', ()=>{
+    if(btn.classList.contains('out')) return;
+    btn.classList.add('out');
+    lit--;
+    if(lit===0){
+      document.getElementById('wish').classList.add('show');
+      document.getElementById('cakeHint').textContent = 'hepsi söndü ✨';
+      launchConfetti();
+    }
+  });
+  cake.appendChild(btn);
+}
+
+const reasons = [
+  "İlk günden itibaren çok özel birisi olduğunu biliyodum hayatımdaki en anlamlı şeysin çok seviyorum seni.",
+  "Gülüşüne bayılıyorum güldüğün bir videoyu ses kaydını izlemek ya da yanımdayken direkt görmek duymak kadar beni aşırı mutlu ediyo.",
+  "Her zaman yanında olucam yer zaman fark etmez en değerlimsin benim.",
+  "İlk defa birinin mutluluğuyla bu kadar mutlu oluyorum mutlu olmak sana çok yakışıyo inşallah hep mutlu olursun bundan sonrasında da.",
+  "Her şeyinle mükemmelsin gözlerine bakmak elini tutmak sesini duymak kokunu hissetmek hiçbiri olmasa bile, sırf varlığın için her şeyimi veririm.",
+  "Yanımda olmasan veya yazmasan bile varlığın bana huzur vermeye yetiyo."
+];
+const grid = document.getElementById('grid');
+reasons.forEach((text,i)=>{
+  const card = document.createElement('div');
+  card.className='card';
+  card.innerHTML = `
+    <div class="card-inner">
+      <div class="face front">Sebep ${String(i+1).padStart(2,'0')}</div>
+      <div class="face back">${text}</div>
+    </div>`;
+  card.addEventListener('click', ()=> card.classList.toggle('flipped'));
+  grid.appendChild(card);
+});
+
+const memories = document.getElementById('memories');
+for(let i=1;i<=4;i++){
+  const box = document.createElement('div');
+  box.className='memory';
+  box.innerHTML = `<span>fotoğraf ${i}<br><img src="img/${i}.jpg" alt="Anı ${i}"></span>`;
+  memories.appendChild(box);
+}
+
+// konfeti
+function launchConfetti(){
+  const colors = ['#e8b657','#f3a7b0','#faf3e8','#9b8ac9'];
+  for(let i=0;i<80;i++){
+    const c = document.createElement('div');
+    c.className='confetti';
+    const size = 4+Math.random()*6;
+    c.style.width = size+'px';
+    c.style.height = size*0.6+'px';
+    c.style.background = colors[Math.floor(Math.random()*colors.length)];
+    c.style.left = Math.random()*100+'vw';
+    document.body.appendChild(c);
+    const duration = 2500+Math.random()*2000;
+    const rotate = Math.random()*360;
+    c.animate([
+      { transform:`translateY(0) rotate(0deg)`, opacity:1 },
+      { transform:`translateY(100vh) rotate(${rotate}deg)`, opacity:0.8 }
+    ], { duration, easing:'ease-in', fill:'forwards' });
+    setTimeout(()=>c.remove(), duration);
+  }
+}
+</script>
+
+</body>
+</html>
